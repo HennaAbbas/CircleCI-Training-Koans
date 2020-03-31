@@ -8,3 +8,4 @@ jobs:
     steps:
       - checkout
       - run: echo "description - You are doing the CircleCI Training Koans. Make sure to read the offical docs at circleci.com/docs" 
+      - run : echo "Hello world"
