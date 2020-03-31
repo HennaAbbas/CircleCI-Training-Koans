@@ -11,3 +11,4 @@ workflows:
     # Run the welcome/run job in its own container
     jobs:
       - welcome/run
+      - echo "description - You are doing the CircleCI Training Koans. Make sure to read the offical docs at circleci.com/docs" 
