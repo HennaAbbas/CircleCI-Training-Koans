@@ -15,17 +15,28 @@ jobs:
   build:
     docker: 
       - image: circleci/node
+        environment:
+          TEST_DATABASE_URL: postgresql://root@localhost/circle_test
+        
+  # Service container image
+  
+      - image: circleci/postgres:9.6.5-alpine-ram
     steps:
       - checkout
-      - run:
-          name: "'run' statements can actually contain a 'name' and 'command' argument as well"
-          command: | 
-            echo "You can even have multiline commands."
-      - restore_cache: 
-          key: v1-dependencies-
-      - run: mkdir ~/cache/
-      - run: echo "testfile" > ~/cache/log.txt
-      - save_cache:
-          key: v1-dependencies-
-          paths: ~/cache
+      - run: sudo apt-get update
+      - run: sudo apt-get install postgresql-client-9.6
+      - run: whoami  
+      - run: |
+          psql \
+          -d $TEST_DATABASE_URL \
+          -c "CREATE TABLE test (name char(25));"
+      - run: |
+          psql \
+          -d $TEST_DATABASE_URL \
+          -c "INSERT INTO test VALUES ('John'), ('Joanna'), ('Jennifer');"
+      - run: |
+          psql \
+          -d $TEST_DATABASE_URL \
+          -c "SELECT * from test"
+         
 
